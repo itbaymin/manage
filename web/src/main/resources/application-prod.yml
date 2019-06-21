@@ -1,0 +1,8 @@
+upload:
+  path: /mnt/user
+resource:
+  prefix: /user/
+  location: file:/mnt/
+video:
+  local:
+    path: /mnt/movie

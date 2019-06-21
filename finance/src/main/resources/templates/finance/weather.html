@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="finance/layout (type=${action})">
+    <div class="container-fluid" th:fragment="content">
+        <div class="row page-titles">
+            <div class="col-md-6 col-8 align-self-center">
+                <h3 class="text-themecolor m-b-0 m-t-0">Weather</h3>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/finance/index}">Home</a></li>
+                    <li class="breadcrumb-item active">Weather</li>
+                </ol>
+            </div>
+            <div class="col-md-6 col-4 align-self-center">
+                <a th:href="@{/finance/weather}" class="btn pull-right hidden-sm-down btn-success">刷新</a>
+            </div>
+        </div>
+        <div class="row">
+            <!-- column -->
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-block">
+                        <h4 class="card-title title"></h4>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>时间</th>
+                                        <th>白天/夜间温度</th>
+                                        <th>白天/夜间天气</th>
+                                        <th>白天/夜间风向</th>
+                                        <th>白天/夜间风力</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.14&key=f2413de62ec9a906ae9b5c156fade4da"></script>
+        <script th:inline="javascript">
+            //加载天气查询插件
+            AMap.plugin('AMap.Weather', function() {
+                //创建天气查询实例
+                var weather = new AMap.Weather();
+                /*<![CDATA[*/
+                    var city = /*[[${keyword==null?"成都市":keyword}]]*/ ;
+                /*]]>*/
+                //执行实时天气信息查询
+                weather.getForecast(city, function(err, data) {
+                    console.log(err,data);
+                    parseTitle(err,data);
+                    parseData(err,data);
+                });
+            });
+
+            function parseTitle(err,data) {
+                if(err)
+                    $(".title").html("<span style='color: #dd4b39'>Requert Failed!</span>");
+                else
+                    return $(".title").html(data.province+"/"+data.city);
+            }
+            
+            function parseData(err,data) {
+                var html = "<tr><td colspan='5'>未查询到天气信息</td></tr>";
+                if(!err){
+                    html = "";
+                    for(let info of data.forecasts){
+                        html += "<tr><td>"+parseDate(info.date,info.week)+"</td><td>"+info.dayTemp+"℃/"+info.nightTemp+"℃</td><td>"+info.dayWeather+"/"+info.nightWeather+"</td><td>"+info.dayWindDir+"/"+info.nightWindDir+"</td><td>"+formatWindPower(info.dayWindPower)+"/"+formatWindPower(info.nightWindPower)+"</td></tr>";
+                    }
+                }
+                $(".table tbody").html(html);
+            }
+            
+            function formatWindPower(power) {
+                return power.replace("≤","小于").replace("≥","大于")+"级";
+            }
+            
+            function parseDate(date,week) {
+                if(diffTime(new Date(date))==0){
+                    return "今天（星期"+week+"）";
+                }else if(diffTime(new Date(date))==1){
+                    return "明天（星期"+week+"）";
+                }else if(diffTime(new Date(date))==2){
+                    return "后天（星期"+week+"）";
+                }else{
+                    return date+"（星期"+week+"）";
+                }
+            }
+
+            function diffTime(endDate) {
+                var diff = endDate.getTime() - Date.now();
+                return Math.ceil(diff / (24 * 3600 * 1000));
+            }
+        </script>
+    </div>
+</html>

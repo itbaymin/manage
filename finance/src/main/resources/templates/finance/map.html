@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="finance/layout (type=${action})">
+    <!-- Row -->
+    <div class="container-fluid" th:fragment="content">
+        <div class="row page-titles">
+            <div class="col-md-6 col-8 align-self-center">
+                <h3 class="text-themecolor m-b-0 m-t-0">GaoDe map</h3>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/finance/index}">Home</a></li>
+                    <li class="breadcrumb-item active">GaoDe map</li>
+                </ol>
+            </div>
+            <div class="col-md-6 col-4 align-self-center">
+                <a th:href="@{/finance/map}" class="btn pull-right hidden-sm-down btn-success">刷新</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <i id="full-screen" style="font-size: 25px;color: #c0c0c0;position: absolute;top: 10px;right: 15px;z-index: 1" class="btn fa fa-expand m-r-10" aria-hidden="true"></i>
+                <div class="card" id="content">
+                    <div class="card-block">
+                        <h4 class="card-title">高德地图</h4>
+                        <script th:src="@{/finance/js/fullscreen.js}"></script>
+                        <div id="container" class="gmaps"></div>
+                        <div id="panel" style="position: absolute;top: 52px;right: 19px">
+                            <form>
+                                <input id="searchInput" class="form-control" onkeydown="if(event.keyCode==13){return false;}" placeholder="输入关键字搜素POI" />
+                            </form>
+                            <div id="searchResults" style="max-height: 550px;overflow-y: auto"></div>
+                        </div>
+                        <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.14&key=f2413de62ec9a906ae9b5c156fade4da"></script>
+                        <script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+                        <script>
+                            var map = new AMap.Map('container', {
+                                resizeEnable: true
+                            });
+
+                            //加载搜索UI
+                            AMapUI.loadUI(['misc/PoiPicker'], function(PoiPicker) {
+
+                                var poiPicker = new PoiPicker({
+                                    input: 'searchInput',
+                                    placeSearchOptions: {
+                                        map: map,
+                                        pageSize: 5
+                                    },
+                                    searchResultsContainer: 'searchResults'
+                                });
+
+                                poiPicker.on('poiPicked', function(poiResult) {
+                                    poiPicker.hideSearchResults();
+                                    var source = poiResult.source,
+                                        poi = poiResult.item;
+                                    if (source !== 'search') {
+                                        //suggest来源的，同样调用搜索
+                                        poiPicker.searchByKeyword(poi.name);
+                                    } else {
+
+                                    }
+                                });
+
+                                poiPicker.onCityReady(function() {
+                                    poiPicker.searchByKeyword('串串');
+
+                                    //加载定位服务
+                                    AMap.plugin('AMap.Geolocation', function() {
+                                        var geolocation = new AMap.Geolocation({
+                                            enableHighAccuracy: true,//是否使用高精度定位，默认:true
+                                            timeout: 10000,          //超过10秒后停止定位，默认：5s
+                                            buttonPosition:'RB',    //定位按钮的停靠位置
+                                            buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+                                            zoomToAccuracy: true,   //定位成功后是否自动调整地图视野到定位点
+
+                                        });
+                                        map.addControl(geolocation);
+                                        geolocation.getCurrentPosition(function(status,result){
+                                            if(status=='complete'){
+                                                onComplete(result)
+                                            }else{
+                                                onError(result)
+                                            }
+                                        });
+                                    });
+                                });
+                            });
+
+
+                            //解析定位结果
+                            function onComplete(data) {
+                                var trafficLayer = new AMap.TileLayer.Traffic({
+                                    zIndex: 10
+                                });
+                                map.add(trafficLayer);//添加图层到地图
+
+
+                            }
+                            //解析定位错误信息
+                            function onError(data) {
+                                alert("定位失败！")
+                            }
+
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</html>

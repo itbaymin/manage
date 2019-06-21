@@ -1,0 +1,14 @@
+spring:
+  mail:
+    port: 25
+    username: 18215637262@163.com
+    password: byc996948901
+    protocol: smtp
+    host: smtp.163.com
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true

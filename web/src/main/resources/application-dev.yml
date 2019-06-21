@@ -1,0 +1,8 @@
+upload:
+  path: ./finance/src/main/resources/static/finance/assets/images/users
+resource:
+  prefix: /finance/assets/images/users/
+  location: file:F:/IdeaWorkspace/manage/finance/src/main/resources/static/
+video:
+  local:
+    path: D:\迅雷下载

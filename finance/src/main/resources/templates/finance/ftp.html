@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="finance/layout (type=${action})">
+    <div class="container-fluid" th:fragment="content">
+        <div class="row page-titles">
+            <div class="col-md-6 col-8 align-self-center">
+                <h3 class="text-themecolor m-b-0 m-t-0">FTP</h3>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/finance/index}">Home</a></li>
+                    <li class="breadcrumb-item active">FTP</li>
+                </ol>
+            </div>
+            <div class="col-md-6 col-4 align-self-center">
+                <a th:href="@{/finance/index}" class="btn pull-right hidden-sm-down btn-success">刷新</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3" style="max-height: 650px;overflow-y: auto">
+                <div class="card">
+                    <div class="card-block">
+                        <form id="fileForm" class="form-horizontal form-material" enctype="multipart/form-data" method="POST">
+                            <div class="form-group">
+                                <label class="col-md-12">文件选择</label>
+                                <div class="col-md-12">
+                                    <input type="text" disabled class="form-control form-control-line fileName"/>
+                                    <input type="file" id="file" name="file" style="position: absolute;top:0;left: 0;opacity: 0;width: 100%;height: 100%"/>
+                                    <script>
+                                        $("#file").on('change', function( e ){
+                                            var name = e.currentTarget.files[0].name;
+                                            $(".fileName").val(name);
+                                         });
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-12">保存名</label>
+                                <div class="col-md-12">
+                                    <input type="text" name="fileName" class="form-control form-control-line fileName">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-12">文件夹</label>
+                                <div class="col-md-12">
+                                    <input name="folder" class="form-control form-control-line"/>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <button class="btn btn-success" id="submnitBtn" onclick="uploadFile()">上传</button>
+                                <script>
+                                    function uploadFile() {
+                                        var formData = new FormData();
+                                        formData.append("file",$("#file")[0].files[0]);
+                                        formData.append("folder",$("input[name='folder']").val());
+                                        formData.append("fileName",$("input[name='fileName']").val());
+                                        $.ajax({
+                                            url : _ctx+"uploadFile",
+                                            type : 'POST',
+                                            data : formData,
+                                            processData : false,
+                                            contentType : false,
+                                            beforeSend:function(){
+                                                $("#submnitBtn").attr("disabled",true);
+                                            },
+                                            success:function (data) {
+                                                if(data.code==200){
+                                                    alert("上传成功");
+                                                    document.getElementById('content').src=document.getElementById('content').src;
+                                                }else{
+                                                    alert("上传失败")
+                                                }
+                                            },
+                                            error:function () {
+                                                alert("上传失败");
+                                            },
+                                            complete:function () {
+                                                $("#submnitBtn").attr("disabled",false);
+                                            }
+                                        });
+                                    }
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-9" style="min-height: 650px;border: 1px solid #ccc;padding: 0;">
+                <i id="full-screen" style="font-size: 25px;color: #c0c0c0;position: absolute;top: 20px;right: 20px" class="btn fa fa-expand m-r-10" aria-hidden="true"></i>
+                <iframe id="content" th:src="${ftpUrl}" frameborder="0" scrolling="auto" width="100%" height="100%"  security="restricted" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts">
+                </iframe>
+                <script th:src="@{/finance/js/fullscreen.js}"></script>
+            </div>
+        </div>
+    </div>
+</html>

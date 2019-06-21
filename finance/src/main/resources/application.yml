@@ -1,0 +1,5 @@
+remote:
+  maxTotalConnect: 0
+  maxConnectPerRoute: 200
+  connectTimeout: 2000
+  readTimeout: 3000

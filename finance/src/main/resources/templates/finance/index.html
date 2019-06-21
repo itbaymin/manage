@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="finance/layout (type=${action})">
+    <!-- Row -->
+    <div class="container-fluid" th:fragment="content">
+        <div class="row page-titles">
+            <div class="col-md-6 col-8 align-self-center">
+                <h3 class="text-themecolor m-b-0 m-t-0">Dashboard</h3>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/finance/index}">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
+            </div>
+            <div class="col-md-6 col-4 align-self-center">
+                <a th:href="@{/finance/index}" class="btn pull-right hidden-sm-down btn-success">刷新</a>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Column -->
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-block">
+                        <h4 class="card-title">Daily Publish</h4>
+                        <div class="text-right">
+                            <h2 class="font-light m-b-0"><i class="ti-arrow-up text-success"></i><span id="day-count"></span></h2>
+                            <span class="text-muted">Today Publish</span>
+                        </div>
+                        <span class="text-success" id="day-percent"></span>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" id="day-progress" style="height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Column -->
+            <!-- Column -->
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-block">
+                        <h4 class="card-title">Weekly Publish</h4>
+                        <div class="text-right">
+                            <h2 class="font-light m-b-0"><i class="ti-arrow-up text-info"></i><span id="week-count"></span></h2>
+                            <span class="text-muted">Week Publish</span>
+                        </div>
+                        <span class="text-info" id="week-percent"></span>
+                        <div class="progress">
+                            <div class="progress-bar bg-info" role="progressbar" id="week-progress" style="height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Column -->
+        </div>
+        <!-- Row -->
+        <!-- Row -->
+        <div class="row">
+            <!-- column -->
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-block">
+                        <h4 class="card-title">Publish History</h4>
+                        <div class="flot-chart">
+                            <div class="flot-chart-content" id="flot-line-chart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- column -->
+        </div>
+        <!-- Row -->
+        <!-- Row -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-block">
+                        <select class="custom-select pull-right" id="moviePage">
+                        </select>
+                        <select class="custom-select pull-right" id="movieSize" style="margin-right: 10px">
+                            <option th:value="10">10条</option>
+                            <option th:value="20">20条</option>
+                            <option th:value="50">50条</option>
+                            <option th:value="100">100条</option>
+                        </select>
+                        <h4 class="card-title">New Movies</h4>
+                        <div class="table-responsive m-t-40">
+                            <table class="table stylish-table" id="movies">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">Name</th>
+                                        <th>Publish_time</th>
+                                        <th>Language</th>
+                                        <th>Screen</th>
+                                        <th>Option</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <script th:src="@{/finance/js/clipboard.js}"></script>
+                                <script th:src="@{/finance/js/index.js}"></script>
+                                    <tr>
+                                    <td style="width:50px;"><span class="round">S</span></td>
+                                    <td>
+                                        <h6>Sunil Joshi</h6><small class="text-muted">Web Designer</small>
+                                    </td>
+                                    <td>Elite Admin</td>
+                                    <td>$3.9K</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Row -->
+        <!-- Row -->
+        <div class="row">
+            <!-- Column -->
+            <div class="col-lg-4" th:each="movie,newStat:${news}">
+                <div class="card">
+                    <img class="card-img-top img-responsive" th:src="${movie.cover}" th:onerror="'javascript:this.src=\''+@{/finance/assets/images/big/img1.jpg}+'\''" style="height: 350px" alt="Card">
+                    <div class="card-block">
+                        <ul class="list-inline font-14">
+                            <li class="p-l-0" th:text="${movie.publish_time}">20 May 2016</li>
+                            <li><a href="javascript:void(0)" class="link" th:text="${movie.show_time}">3 Comment</a></li>
+                        </ul>
+                        <h3 class="font-normal" th:text="${movie.name}">Featured Hydroflora Pots Garden &amp; Outdoors</h3>
+                    </div>
+                </div>
+            </div>
+            <!-- Column -->
+        </div>
+        <!-- Row -->
+        <script th:src="@{/finance/assets/plugins/flot/jquery.flot.js}"></script>
+        <script th:src="@{/finance/assets/plugins/flot.tooltip/js/jquery.flot.tooltip.min.js}"></script>
+        <script th:src="@{/finance/js/flot-data.js}"></script>
+    </div>
+</html>

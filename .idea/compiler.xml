@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="com.fireyao" />
+        <module name="common" />
+        <module name="dao" />
+        <module name="finance" />
+        <module name="jpa" />
+        <module name="jwt" />
+        <module name="mail" />
+        <module name="mq" />
+        <module name="redis" />
+        <module name="security" />
+        <module name="spider" />
+        <module name="web" />
+        <module name="webmajic" />
+        <module name="websocket" />
+        <module name="websocketclient" />
+        <module name="websocketserver" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="1.8">
+      <module name="com.fireyao" target="1.8" />
+      <module name="common" target="1.8" />
+      <module name="dao" target="1.8" />
+      <module name="finance" target="1.8" />
+      <module name="jpa" target="1.8" />
+      <module name="jwt" target="1.8" />
+      <module name="mail" target="1.8" />
+      <module name="manage" target="1.8" />
+      <module name="mq" target="1.8" />
+      <module name="redis" target="1.8" />
+      <module name="security" target="1.8" />
+      <module name="spider" target="1.8" />
+      <module name="spring" target="1.8" />
+      <module name="web" target="1.8" />
+      <module name="webmagic" target="1.8" />
+      <module name="webmajic" target="1.8" />
+      <module name="websocket" target="1.8" />
+      <module name="websocketclient" target="1.8" />
+      <module name="websocketserver" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

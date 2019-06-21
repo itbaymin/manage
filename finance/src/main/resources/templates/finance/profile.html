@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="finance/layout (type=${action})">
+    <div class="container-fluid" th:fragment="content">
+        <div class="row page-titles">
+            <div class="col-md-6 col-8 align-self-center">
+                <h3 class="text-themecolor m-b-0 m-t-0">Profile</h3>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/finance/index}">Home</a></li>
+                    <li class="breadcrumb-item active">Profile</li>
+                </ol>
+            </div>
+            <div class="col-md-6 col-4 align-self-center">
+                <a th:href="@{/finance/profile}" class="btn pull-right hidden-sm-down btn-success">刷新</a>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Column -->
+            <div class="col-lg-4 col-xlg-3 col-md-5">
+                <div class="card">
+                    <div class="card-block">
+                        <center class="m-t-30">
+                            <form th:action="@{/profile/upload}" enctype="multipart/form-data" method="POST">
+                                <div style="width: 150px;position: relative">
+                                    <input type="file" th:name="file" accept="image/png,image/jpg,image/jpeg" id="file" onchange="changeToop();" class="img-circle" style="position: absolute;top:0;left: 0;opacity: 0;width: 100%;height: 100%"/>
+                                    <script>
+                                        function Id(id){
+                                            return document.getElementById(id);
+                                        }
+                                        function changeToop(){
+                                            var file = Id("file");
+                                            if(file.value!=''){
+                                                preImg("file","myimg");
+                                            }
+                                        }
+                                        //获取input[file]图片的url Important
+                                        function getFileUrl(fileId) {
+                                            var url;
+                                            var file = Id(fileId);
+                                            var agent = navigator.userAgent;
+                                            if (agent.indexOf("MSIE")>=1) {
+                                                url = file.value;
+                                            } else if(agent.indexOf("Firefox")>0) {
+                                                url = window.URL.createObjectURL(file.files.item(0));
+                                            } else if(agent.indexOf("Chrome")>0) {
+                                                url = window.URL.createObjectURL(file.files.item(0));
+                                            }
+                                            return url;
+                                        }
+                                        //读取图片后预览
+                                        function preImg(fileId,imgId) {
+                                            var imgPre =Id(imgId);
+                                            imgPre.src = getFileUrl(fileId);
+                                        }
+                                    </script>
+                                    <img th:src="${user.icon}" class="img-circle" id="myimg" width="150" height="150"/>
+                                </div>
+                                <h4 class="card-title m-t-10" th:text="${user.name}">暂无</h4>
+                                <h6 class="card-subtitle" th:text="${user.description}">暂无</h6>
+                                <div class="row text-center justify-content-md-center">
+                                    <div class="col-4">
+                                        <a th:href="@{/profile/repeat}" class="link">
+                                            <i class="fa fa-repeat"></i>
+                                            <span class="font-medium">更换</span>
+                                        </a>
+                                    </div>
+                                    <div class="col-4">
+                                        <a href="javascript:void(0)" class="link">
+                                            <i class="fa fa-upload"></i>
+                                            <span class="font-medium">上传</span>
+                                            <input type="submit" style="position: absolute;top: 0;left: 0;opacity: 0;width: 100%;height: 100%"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </center>
+                    </div>
+                </div>
+            </div>
+            <!-- Column -->
+            <!-- Column -->
+            <div class="col-lg-8 col-xlg-9 col-md-7">
+                <div class="card">
+                    <div class="card-block">
+                        <form class="form-horizontal form-material" th:action="@{/profile/doEdit}" th:method="POST">
+                            <input th:name="id" th:type="hidden" th:value="${user.id}"/>
+                            <div class="form-group">
+                                <label class="col-md-12">全名</label>
+                                <div class="col-md-12">
+                                    <input type="text" name="name" th:value="${user.name}" class="form-control form-control-line">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="example-email" class="col-md-12">Email</label>
+                                <div class="col-md-12">
+                                    <input type="email" class="form-control form-control-line" name="email" id="example-email" th:value="${user.email}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-12">密码</label>
+                                <div class="col-md-12">
+                                    <input type="text" name="password" th:value="${user.password}" class="form-control form-control-line">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-12">手机号</label>
+                                <div class="col-md-12">
+                                    <input type="text" name="tel" th:value="${user.tel}" class="form-control form-control-line">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-12">简介</label>
+                                <div class="col-md-12">
+                                    <input th:name="description" th:value="${user.description}" class="form-control form-control-line"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-12">城市</label>
+                                <div class="col-sm-12">
+                                    <select th:name="city" th:value="${user.city}" class="form-control form-control-line">
+                                        <option>成都</option>
+                                        <option>北京</option>
+                                        <option>上海</option>
+                                        <option>广州</option>
+                                        <option>深圳</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <button class="btn btn-success">更新</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</html>

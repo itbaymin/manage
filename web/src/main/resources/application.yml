@@ -1,0 +1,39 @@
+server:
+  port: 8081
+spring:
+  profiles:
+    active: dev
+  thymeleaf:
+    cache: false
+    mode: LEGACYHTML5
+  resources:
+    chain:
+      strategy:
+        content:
+          enabled: true
+          paths: /**
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://47.105.192.33:3310/manage?serverTimezone=GMT%2B8&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: root
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        temp:
+          use_jdbc_metadata_defaults: false
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  redis:
+    host: 47.105.192.33
+    port: 6379
+    password: byc123
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+    timeout: 10000

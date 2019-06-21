@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="finance/layout (type=${action})">
+    <div class="container-fluid" th:fragment="content">
+        <div class="row page-titles">
+            <div class="col-md-6 col-8 align-self-center">
+                <h3 class="text-themecolor m-b-0 m-t-0">Label</h3>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/finance/index}">Home</a></li>
+                    <li class="breadcrumb-item active">Label</li>
+                </ol>
+            </div>
+            <div class="col-md-6 col-4 align-self-center">
+                <form th:action="@{/label/saveLabel}" th:method="POST" id="saveForm">
+                    <input type="hidden" name="url"/>
+                    <span class="btn pull-right hidden-sm-down btn-success" onclick="saveLabel()">添加</span>
+                    <select name="typeId" class="form-control pull-right" style="width: 200px;min-height: 33px;padding: 0 10px;height: 34px;margin-right: 10px">
+                        <option th:each="type,typeStat:${types}" th:value="${type.id}" th:text="${type.name}"></option>
+                    </select>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3" style="max-height: 650px;overflow-y: auto">
+                <table class="table stylish-table">
+                    <thead>
+                    <tr>
+                        <th style="width:50px;">标识</th>
+                        <th>类型</th>
+                    </tr>
+                    </thead>
+                    <tbody th:each="type,typeStat:${types}">
+                        <tr>
+                            <td th:switch="${typeStat.index%5}">
+                                <span th:case="0" class="round" th:text="${#strings.substring(type.name,0,1)}">S</span>
+                                <span th:case="1" class="round round-success" th:text="${#strings.substring(type.name,0,1)}">S</span>
+                                <span th:case="2" class="round round-primary" th:text="${#strings.substring(type.name,0,1)}">S</span>
+                                <span th:case="3" class="round round-warning" th:text="${#strings.substring(type.name,0,1)}">S</span>
+                                <span th:case="4" class="round round-danger" th:text="${#strings.substring(type.name,0,1)}">S</span>
+                            </td>
+                            <td>
+                                <h6 th:text="${type.name}">最新技术文章</h6><small class="text-muted" th:text="${type.description}">Web Designer</small></td>
+                        </tr>
+                        <tr th:each="label,labelStat:${type.labels}">
+                            <td colspan="2" style="padding: 10px 20px;white-space:nowrap;text-overflow:ellipsis;">
+                                <a th:onclick="'changeUrl(\''+${label.url}+'\')'" style="cursor: pointer"><img width="15px" th:src="${label.icon}">&nbsp;<small th:text="${#strings.length(label.title)>30?#strings.substring(label.title,0,30)+'...':label.title}">百度一下，你就知道</small></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-9" style="min-height: 650px;border: 1px solid #ccc;padding: 0;">
+                <i id="full-screen" style="font-size: 25px;color: #c0c0c0;position: absolute;top: 20px;right: 20px" class="btn fa fa-expand m-r-10" aria-hidden="true"></i>
+                <iframe id="content" th:src="${url}" frameborder="0" scrolling="auto" width="100%" height="100%"  security="restricted" sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts">
+                </iframe>
+                <script th:src="@{/finance/js/fullscreen.js}"></script>
+                <script>
+                    function changeUrl(url) {
+                        $("#content").attr("src",url);
+                    }
+                    function saveLabel() {
+                        $("input[name='url']").val($("#content").attr("src"))
+                        $("#saveForm").submit();
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title th:text="${fileName}">Product Admin - Dashboard HTML Template</title>
+    <!-- https://fontawesome.com/ -->
+    <link th:href="@{/finance/assets/plugins/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- https://getbootstrap.com/ -->
+    <link th:href="@{/finance/css/templatemo-style.css}" rel="stylesheet">
+    
+</head>
+
+<body id="reportsPage">
+    <video style="margin:100px 15%" class="video-js vjs-default-skin" controls preload="auto" autoplay loop width="70%" data-setup="{}">
+		 <source th:src="@{/playLocalVideo?fileName=}+${fileName}" />
+	</video>
+</body>
+
+</html>
