@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -129,5 +130,12 @@ public class FTPController {
             log.error("上传出错");
             return R.fail();
         }
+    }
+
+    @ResponseBody
+    @RequestMapping("finance/getFTPFiles")
+    public R getFileList(String dir){
+        List<FTPUtil.FTPData> dirList = FTPUtil.getInstance().getDirList(dir);
+        return R.succ(dirList);
     }
 }

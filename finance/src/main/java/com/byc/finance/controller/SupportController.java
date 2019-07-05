@@ -100,12 +100,8 @@ public class SupportController {
     }
 
     @RequestMapping("finance/ftp")
-    public String index(Model model, HttpServletRequest req){
-        String username = (String) req.getAttribute("username");
-        User user = userRepository.findByName(username);
-        model.addAttribute("user",user);
+    public String index(Model model){
         model.addAttribute("action","ftp");
-        model.addAttribute("ftpUrl","http://47.105.192.33/big");
         return "finance/ftp";
     }
 

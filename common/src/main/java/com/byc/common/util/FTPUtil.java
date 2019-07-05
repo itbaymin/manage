@@ -1,6 +1,5 @@
 package com.byc.common.util;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -101,10 +100,8 @@ public class FTPUtil {
 
 
     /**
-     * 功能描述： 改变目录路径 创建人： wangsen 创建时间：2018年4月12日 上午10:28:28 修改人 修改时间 修改内容
-     *
-     * @param directory
-     *            要改变的路径
+     * 功能描述： 改变目录路径
+     * @param directory 要改变的路径
      * @return boolean
      */
     private boolean enterDir(String directory) {
@@ -347,7 +344,7 @@ public class FTPUtil {
             enterDir(path);
             FTPFile[] ftpFiles = ftpClient.listFiles();
             for(FTPFile file:ftpFiles){
-                result.add(new FTPData(file.getName(),file.getSize(),file.getType()==0?"file":"dir"));
+                result.add(new FTPData(file.getName(),file.getSize(),file.getType()==0?"文件":"目录"));
             }
         } catch (Exception e) {
             log.error("获取目录【{}】列表错误：", path, e);
@@ -358,11 +355,24 @@ public class FTPUtil {
     }
 
     @Data
-    @AllArgsConstructor
     public class FTPData {
-        private String fileName;
+        private String name;
         private long size;
         private String type;
+        private String icon;
+
+        public FTPData(String name,long size,String type){
+            this.name = name;
+            this.size = size;
+            this.type = type;
+            this.icon = parseIcon(name);
+        }
+        private String parseIcon(String name){
+            String suffix = "";
+            if(name.contains("."))
+                suffix = name.substring(name.lastIndexOf(".")+1, name.length());
+            return FileTypeUtil.getFileType(suffix).getIcon();
+        }
     }
 
 }
