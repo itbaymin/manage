@@ -66,8 +66,11 @@ public class FTPController {
         FTPClient ftpClient = null;
         BufferedInputStream in = null;
         OutputStream os = null;
+        FTPUtil ftpUtil = null;
         try {
-            ftpClient = FTPUtil.getFTPClient("47.105.192.33","big","big",21);
+            ftpUtil = FTPUtil.getInstance();
+            ftpUtil.init();
+            ftpClient = ftpUtil.getFtpClient();
             ftpClient.changeWorkingDirectory(ftpPath);
 
             response.setContentType("video/*"); //设置返回的文件类型
@@ -99,7 +102,7 @@ public class FTPController {
             try {
                 if(os != null)os.close();
                 if(in != null)in.close();
-                if(ftpClient != null)ftpClient.logout();
+                ftpUtil.close();
             } catch (IOException e) {
                 log.error("关闭资源异常");
             }
@@ -116,11 +119,9 @@ public class FTPController {
     public R doUpload(@RequestParam("file") MultipartFile file,String fileName,String folder){
         if(file==null || StringUtils.isEmpty(fileName) || StringUtils.isEmpty(folder))
             return R.fail();
-        FTPClient ftpClient;
         try {
             InputStream inputStream = file.getInputStream();
-            ftpClient = FTPUtil.getMyClient();
-            if(FTPUtil.uploadFile(ftpClient,folder,fileName,inputStream))
+            if(FTPUtil.getInstance().uploadFile(folder,fileName,inputStream))
                 return R.succ();
             else
                 return R.fail();

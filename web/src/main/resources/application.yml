@@ -6,6 +6,10 @@ spring:
   thymeleaf:
     cache: false
     mode: LEGACYHTML5
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
   resources:
     chain:
       strategy:
