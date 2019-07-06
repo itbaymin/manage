@@ -63,7 +63,7 @@
                     <!-- User profile and search -->
                     <ul class="navbar-nav my-lg-0">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img th:src="@{/finance/assets/images/users/1.jpg}" alt="user" class="profile-pic m-r-5" /><span th:text="${username}">guest</span></a>
+                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img th:src="@{/finance/assets/images/logo-icon.png}" alt="user" class="profile-pic m-r-5" /><span th:text="${username}">guest</span></a>
                         </li>
                     </ul>
                 </div>
@@ -120,5 +120,24 @@
             </footer>
         </div>
     </div>
+    <!-- Modal -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" id="modal-remind" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">提示</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function alert(mes) {
+            $("#modal-remind .modal-body").html(mes);
+            $("#modal-remind").modal("show");
+        }
+    </script>
 </body>
 </html>

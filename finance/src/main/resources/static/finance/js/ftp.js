@@ -12,11 +12,11 @@ function uploadFile() {
         contentType : false,
         beforeSend:function(){
             $("#submnitBtn").attr("disabled",true);
+            $(".fa-spinner").show();
         },
         success:function (data) {
             if(data.code==200){
-                alert("上传成功");
-                fullFiles("/big");
+                fullFiles(_dir);
             }else{
                 alert("上传失败")
             }
@@ -26,17 +26,19 @@ function uploadFile() {
         },
         complete:function () {
             $("#submnitBtn").attr("disabled",false);
+            $(".fa-spinner").hide();
         }
     });
 }
 
-
+var _dir;
 /**---ftp文件列表---**/
 $(function () {
     fullFiles("/big");
 })
 //填充文件显示区
 function fullFiles(dir) {
+    _dir = dir;
     var menu = "",url = "";
     var split = dir.split("/");
     for(var i=0;i<split.length;i++){
