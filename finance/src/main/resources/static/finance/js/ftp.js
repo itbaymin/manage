@@ -92,9 +92,9 @@ function delFile(path,name,type){
     $.post(_ctx+"finance/delFTPFile",{path:path,name:name,type:type},function (data) {
         if(data.code==200){
             fullFiles(path);
-            alert("成功");
+            alert("删除成功");
         }else{
-            alert("失败");
+            alert("删除失败");
         }
     })
 }
