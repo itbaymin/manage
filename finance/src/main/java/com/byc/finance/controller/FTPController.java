@@ -7,6 +7,7 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,7 +65,7 @@ public class FTPController {
     }
     @RequestMapping("playFtpVideo")
     public void downloadFile(HttpServletResponse response,String fileName){
-        FTPClient ftpClient = null;
+        FTPClient ftpClient;
         BufferedInputStream in = null;
         OutputStream os = null;
         FTPUtil ftpUtil = null;
@@ -137,5 +138,67 @@ public class FTPController {
     public R getFileList(String dir){
         List<FTPUtil.FTPData> dirList = FTPUtil.getInstance().getDirList(dir);
         return R.succ(dirList);
+    }
+
+    @ResponseBody
+    @RequestMapping("finance/delFTPFile")
+    public R delFile(String path,String name,String type){
+        if("文件".equals(type))
+            return FTPUtil.getInstance().deleteFile(path, name)?R.succ():R.fail();
+        else
+            return FTPUtil.getInstance().deleteDir(path, name)?R.succ():R.fail();
+    }
+
+    @RequestMapping("finance/downloadFTPFile")
+    public void doenloadFile(HttpServletResponse response,String path,String name){
+        FTPClient ftpClient;
+        BufferedInputStream in = null;
+        OutputStream os = null;
+        FTPUtil ftpUtil = null;
+        try {
+            ftpUtil = FTPUtil.getInstance();
+            ftpUtil.init();
+            ftpClient = ftpUtil.getFtpClient();
+            ftpClient.changeWorkingDirectory(path);
+
+            response.setContentType("application/octet-stream");
+            response.setHeader("Content-Disposition", "attachment; filename="+new String( name.getBytes("GBK"), "ISO8859-1" ));
+            os = new BufferedOutputStream(response.getOutputStream()); //得到向客户端输出二进制数据的对象
+            FTPFile[] ftpFiles = ftpClient.listFiles();
+            double size = 0L;
+            for (FTPFile file:ftpFiles){
+                if(file.getName().equals(name))
+                    size = file.getSize();
+            }
+            if(size==0){
+                response.getWriter().print("文件不存在");
+                return;
+            }
+            in = new BufferedInputStream(ftpClient.retrieveFileStream(name));
+            int c,s=0;
+            DecimalFormat df = new DecimalFormat("0.00%");
+            byte[] bytes = new byte[10 * 1024];
+            while((c = in.read(bytes))!= -1) {
+                os.write(bytes, 0, c);
+                os.flush();
+                log.info("已读取：{}，总共：{},进度：{}",formatSize(s += c),formatSize(size),df.format(s/size));
+            }
+        } catch (Exception e) {
+            log.error("读取异常");
+        } finally {
+            try {
+                if(os != null)os.close();
+                if(in != null)in.close();
+                ftpUtil.close();
+            } catch (IOException e) {
+                log.error("关闭资源异常");
+            }
+        }
+    }
+
+    @RequestMapping("finance/showPDF")
+    public String getFileList(String path, String name, Model model){
+        model.addAttribute("src","http://47.105.192.33/"+path+"/"+name);
+        return "finance/pdf";
     }
 }

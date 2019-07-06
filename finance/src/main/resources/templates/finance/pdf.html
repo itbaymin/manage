@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" style="height:100%">
+<head>
+    <meta charset="UTF-8">
+    <title>pdf</title>
+    <!--布局样式-->
+    <link th:href="@{/finance/assets/css/pdf/style.css}" rel="stylesheet">
+</head>
+<body style="height:100%;margin:0;">
+<!--pdf test-->
+<div id="pdf" style="height:100%"></div>
+<script th:src="@{/finance/assets/plugins/jquery/jquery.min.js}"></script>
+<script th:src="@{/finance/js/pdfobject.min.js}"></script>
+<script type='text/javascript'>
+    /*<![CDATA[*/
+    var pdf_src = '[[${src}]]';
+    /*]]>*/
+    PDFObject.embed(pdf_src, "#pdf");
+</script>
+</body>
+
+</html>

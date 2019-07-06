@@ -319,15 +319,36 @@ public class FTPUtil {
      * return:boolean
      */
     public boolean deleteFile(String pathname, String filename){
-        boolean flag = false;
+        boolean flag;
         try {
             init();
             enterDir(pathname);
-            ftpClient.deleteFile(filename);
+            flag = ftpClient.deleteFile(filename);
         } catch (Exception e) {
+            flag = false;
             log.error("删除文件失败");
         } finally{
            close();
+        }
+        return flag;
+    }
+
+    /**
+     * Description:删除文件夹
+     * params:[pathname, dirname]
+     * return:boolean
+     */
+    public boolean deleteDir(String pathname, String dirname){
+        boolean flag;
+        try {
+            init();
+            enterDir(pathname);
+            flag = ftpClient.removeDirectory(dirname);
+        } catch (Exception e) {
+            flag = false;
+            log.error("删除文件夹失败");
+        } finally{
+            close();
         }
         return flag;
     }
