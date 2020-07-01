@@ -2,7 +2,6 @@ package com.mail.service;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Component
-@PropertySource("classpath:mail.properties")
 @ConfigurationProperties(prefix="mail")
 public class MailProperties {
     private String protocol;

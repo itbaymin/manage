@@ -2,7 +2,7 @@ spring:
   mail:
     port: 25
     username: 18215637262@163.com
-    password: byc996948901
+    password: NQNPKJJNNBVYDAPF
     protocol: smtp
     host: smtp.163.com
     properties:
@@ -12,3 +12,9 @@ spring:
           starttls:
             enable: true
             required: true
+mail:
+  port: 993
+  username: 996948901@qq.com
+  password: aamsidgplsnfbfhh
+  protocol: imap
+  host: imap.qq.com

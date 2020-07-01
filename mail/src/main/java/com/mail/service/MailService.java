@@ -64,7 +64,6 @@ public class MailService {
         Template template = configurer.getConfiguration().getTemplate(templateName);
         String text = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
         helper.setText(text, true);
-        System.out.println(mimeMessage.getContentID());
         mailSender.send(mimeMessage);
     }
 
